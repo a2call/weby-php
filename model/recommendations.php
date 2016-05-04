@@ -10,7 +10,12 @@ include_once 'model/model.php';
 
 class RecommendationsModel extends Model {
     public function getRecommendations($id_usercookie) {
-        $ids=$this->pdo->query('SELECT id_category FROM categorycounters WHERE id_usercookie='.$id_usercookie.' ORDER BY count DESC LIMIT 3');
+        try {
+            $ids=$this->pdo->query('SELECT id_category FROM categorycounters WHERE id_usercookie='.$id_usercookie.' ORDER BY count DESC LIMIT 3');
+        } catch (PDOException $e) {
+            return NULL;
+        }
+
         $id_data=$ids->fetchAll();
         $ids->closeCursor();
         foreach($id_data as $id){
